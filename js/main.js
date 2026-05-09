@@ -33,7 +33,8 @@ function runCleanup() {
 function switchView(renderFn) {
   if (!app.innerHTML.trim()) {
     renderFn()
-    app.focus()
+    window.scrollTo(0, 0)
+    app.focus({ preventScroll: true })
     return
   }
   app.style.transition = 'opacity var(--duration-short) var(--ease-default)'
@@ -45,7 +46,8 @@ function switchView(renderFn) {
     app.style.transition = ''
     app.style.opacity = ''
     renderFn()
-    app.focus()
+    window.scrollTo(0, 0)
+    app.focus({ preventScroll: true })
   }
   app.addEventListener('transitionend', done, { once: true })
   setTimeout(done, 250)
