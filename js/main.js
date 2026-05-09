@@ -213,6 +213,13 @@ function beginSession() {
                    style="display:flex;flex-direction:column;align-items:center;gap:0.75rem">
                 <div class="breath-ring">
                   <div class="breath-ring__inner" aria-hidden="true"></div>
+                  <button class="breath-ring__btn" id="btn-ring-toggle"
+                          aria-label="Resume practice" data-paused="">
+                    <svg class="ring-icon ring-icon--play" viewBox="0 0 24 24" fill="currentColor"
+                         width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    <svg class="ring-icon ring-icon--pause" viewBox="0 0 24 24" fill="currentColor"
+                         width="22" height="22" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                  </button>
                 </div>
                 <p data-cue class="label" aria-hidden="true"
                    style="min-height:1.2em;text-align:center"></p>
@@ -260,6 +267,7 @@ function beginSession() {
 
   wireChimeToggle('practice-chime')
   document.getElementById('btn-pause').addEventListener('click', togglePause)
+  document.getElementById('btn-ring-toggle').addEventListener('click', togglePause)
   document.getElementById('btn-prev-step').addEventListener('click', prevStep)
   document.getElementById('btn-skip').addEventListener('click', skipStep)
   document.getElementById('btn-prev').addEventListener('click', () => navigatePhase(-1))
@@ -375,11 +383,13 @@ function startPhase(index) {
       state.timerState = 'paused'
       const btn = document.getElementById('btn-pause')
       if (btn) { btn.textContent = 'Resume'; btn.setAttribute('aria-label', 'Resume practice') }
+      syncRingButton()
     },
     onResume: () => {
       state.timerState = 'running'
       const btn = document.getElementById('btn-pause')
       if (btn) { btn.textContent = 'Pause'; btn.setAttribute('aria-label', 'Pause practice') }
+      syncRingButton()
     }
   })
 
@@ -400,6 +410,18 @@ function destroyActiveSession() {
   if (activeTimer) { activeTimer.destroy(); activeTimer = null }
   if (activeBreath) { activeBreath.destroy(); activeBreath = null }
   state.timerState = 'idle'
+}
+
+function syncRingButton() {
+  const btn = document.getElementById('btn-ring-toggle')
+  if (!btn) return
+  if (state.timerState === 'running') {
+    btn.removeAttribute('data-paused')
+    btn.setAttribute('aria-label', 'Pause practice')
+  } else {
+    btn.setAttribute('data-paused', '')
+    btn.setAttribute('aria-label', 'Resume practice')
+  }
 }
 
 function togglePause() {

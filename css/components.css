@@ -122,6 +122,45 @@
   will-change: transform;
 }
 
+.breath-ring__btn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+  color: var(--color-accent);
+  touch-action: manipulation;
+  transition: background var(--duration-short) var(--ease-default);
+}
+
+.breath-ring__btn:hover {
+  background: var(--color-accent-light);
+}
+
+.breath-ring__btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.ring-icon {
+  position: absolute;
+  pointer-events: none;
+  transition: opacity var(--duration-short) var(--ease-default);
+}
+
+/* Paused: play icon visible, pause icon hidden */
+.ring-icon--play  { opacity: 1; }
+.ring-icon--pause { opacity: 0; }
+
+/* Playing: hide play icon; reveal pause icon on hover only */
+.breath-ring__btn:not([data-paused]) .ring-icon--play  { opacity: 0; }
+.breath-ring__btn:not([data-paused]):hover .ring-icon--pause { opacity: 0.8; }
+
 /* ── Timer display ───────────────────────────────────────────────────── */
 
 .timer-display {
