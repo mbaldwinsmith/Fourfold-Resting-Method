@@ -1,0 +1,65 @@
+:root {
+  /* Colors — light mode */
+  --color-bg: #F7F5F0;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #1A1A18;
+  --color-text-secondary: #6B6860;
+  --color-text-tertiary: #9E9C97;
+  --color-border: rgba(26, 26, 24, 0.10);
+  --color-accent: #3D5A4C;
+  --color-accent-light: #EAF0EC;
+  --color-accent-mid: #7A9E8C;
+
+  /* Spacing — Tailwind-style (1 unit = 0.25rem) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Font families */
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Lora', Georgia, serif;
+
+  /* Font sizes */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.375rem;    /* 22px */
+  --text-2xl: 1.75rem;    /* 28px */
+  --text-3xl: 2.25rem;    /* 36px */
+  --text-4xl: 3rem;       /* 48px */
+
+  /* Transition durations */
+  --duration-short: 200ms;
+  --duration-medium: 400ms;
+  --duration-long: 800ms;
+
+  /* Easing */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Border radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #111210;
+    --color-surface: #1C1D1A;
+    --color-text-primary: #F0EDE6;
+    --color-text-secondary: #9A9890;
+    --color-text-tertiary: #5E5D59;
+    --color-border: rgba(240, 237, 230, 0.08);
+    --color-accent: #7FAF95;
+    --color-accent-light: #1A2520;
+    --color-accent-mid: #4A7A62;
+  }
+}
