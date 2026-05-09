@@ -96,6 +96,10 @@ function chimeToggleHTML(id) {
 function wireChimeToggle(id) {
   const el = document.getElementById(id)
   if (!el) return
+  // If the checkbox was pre-checked from localStorage, activate the engine now.
+  // This call happens inside a user-gesture-triggered view render, so
+  // AudioContext creation is permitted by browser autoplay policy.
+  if (el.checked) chimeEngine.enable()
   el.addEventListener('change', () => {
     state.chimeEnabled = el.checked
     localStorage.setItem('fourfold-chime', String(state.chimeEnabled))

@@ -8,6 +8,7 @@ export function renderSteps(container, steps, activeIndex, onSelect) {
   steps.forEach((step, i) => {
     const card = document.createElement('div');
     card.className = 'step-card';
+    card.setAttribute('role', 'listitem');
     if (i === activeIndex) {
       card.classList.add('step-card--active');
     } else {
