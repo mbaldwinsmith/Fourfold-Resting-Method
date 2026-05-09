@@ -251,3 +251,31 @@
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
+
+/* ── Phase dots ─────────────────────────────────────────────────────── */
+
+.phase-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--duration-short) var(--ease-default),
+              transform var(--duration-short) var(--ease-default);
+}
+
+.phase-dot--active {
+  background: var(--color-accent);
+  transform: scale(1.25);
+}
+
+.phase-dot:hover {
+  background: var(--color-accent-mid);
+}
+
+.phase-dot:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}

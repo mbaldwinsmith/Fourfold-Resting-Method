@@ -30,6 +30,27 @@ function runCleanup() {
   if (_cleanupFn) { _cleanupFn(); _cleanupFn = null }
 }
 
+function switchView(renderFn) {
+  if (!app.innerHTML.trim()) {
+    renderFn()
+    app.focus()
+    return
+  }
+  app.style.transition = 'opacity var(--duration-short) var(--ease-default)'
+  app.style.opacity = '0'
+  let fired = false
+  const done = () => {
+    if (fired) return
+    fired = true
+    app.style.transition = ''
+    app.style.opacity = ''
+    renderFn()
+    app.focus()
+  }
+  app.addEventListener('transitionend', done, { once: true })
+  setTimeout(done, 250)
+}
+
 // ─── Session helpers ──────────────────────────────────────────────────────────
 
 function getActivePhases() {
@@ -101,10 +122,10 @@ function showHome() {
   app.innerHTML = `
     <div class="section">
       <div class="container">
-        <div class="stack fade-up" style="--stack-gap:2.5rem">
+        <div class="stack" style="--stack-gap:2.5rem">
 
           <div class="stack" style="--stack-gap:0.75rem">
-            <h1>${PRACTICE.title}</h1>
+            <h1 class="fade-up">${PRACTICE.title}</h1>
             <p style="color:var(--color-text-secondary);max-width:52ch" class="fade-up--delayed">
               ${PRACTICE.subtitle}. ${PRACTICE.tagline}.
             </p>
@@ -199,7 +220,7 @@ function showPractice() {
   `
 
   wireChimeToggle('ready-chime')
-  document.getElementById('btn-start').addEventListener('click', beginSession)
+  document.getElementById('btn-start').addEventListener('click', () => switchView(beginSession))
 }
 
 // ─── Practice: active session shell ──────────────────────────────────────────
@@ -376,13 +397,18 @@ function startPhase(index) {
     onComplete: () => {
       state.timerState = 'complete'
       if (state.chimeEnabled) chimeEngine.play('end', phase.chimeFrequency)
+      const fill = document.querySelector(`[data-phase-fill="${index}"]`)
+      if (fill) {
+        fill.classList.add('progress-fill--flash')
+        fill.addEventListener('animationend', () => fill.classList.remove('progress-fill--flash'), { once: true })
+      }
       _phaseAdvanceTimeout = setTimeout(() => {
         _phaseAdvanceTimeout = null
         const current = getActivePhases()
         if (state.currentPhaseIndex < current.length - 1) {
           startPhase(state.currentPhaseIndex + 1)
         } else {
-          completePractice()
+          switchView(completePractice)
         }
       }, 2000)
     },
@@ -619,9 +645,9 @@ function init() {
   const savedChime = localStorage.getItem('fourfold-chime')
   if (savedChime === 'true') state.chimeEnabled = true
 
-  router.register('/', showHome)
-  router.register('/practice', showPractice)
-  router.register('/about', showAbout)
+  router.register('/', () => switchView(showHome))
+  router.register('/practice', () => switchView(showPractice))
+  router.register('/about', () => switchView(showAbout))
   router.start()
 }
 

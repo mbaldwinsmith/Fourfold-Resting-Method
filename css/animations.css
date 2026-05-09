@@ -43,6 +43,11 @@
     to   { transform: translateX(200%); }
   }
 
+  @keyframes progressFlash {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
   /* ── Utility classes ───────────────────────────────────────────────── */
 
   .fade-in {
@@ -71,6 +76,10 @@
 
   .animate-pulse {
     animation: pulse 3s ease-in-out infinite;
+  }
+
+  .progress-fill--flash {
+    animation: progressFlash 400ms ease-in-out 2;
   }
 
 }
