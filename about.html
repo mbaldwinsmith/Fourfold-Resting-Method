@@ -8,6 +8,9 @@
   <link rel="canonical" href="index.html#/about">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 
+  <!-- Prevent flash of wrong theme when a saved preference differs from system -->
+  <script>(function(){var t=localStorage.getItem('fourfold-theme');if(t)document.documentElement.dataset.theme=t})()</script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap">
@@ -29,6 +32,7 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html" aria-current="page">About</a></li>
         </ul>
+        <button id="theme-toggle" class="btn btn--ghost btn--icon" aria-label="Switch to dark mode"></button>
       </nav>
     </div>
   </header>
@@ -115,6 +119,8 @@
       <p>&copy; 2026 The Fourfold Resting &mdash; A science-based relaxation and presence practice</p>
     </div>
   </footer>
+
+  <script type="module" src="js/theme.js"></script>
 
 </body>
 </html>

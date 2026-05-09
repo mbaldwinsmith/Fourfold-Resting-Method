@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light;
+
   /* Colors — light mode */
   --color-bg: #F7F5F0;
   --color-surface: #FFFFFF;
@@ -50,8 +52,10 @@
   --radius-lg: 16px;
 }
 
+/* Dark mode — system default (unless manually set to light) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --color-bg: #111210;
     --color-surface: #1C1D1A;
     --color-text-primary: #F0EDE6;
@@ -62,4 +66,18 @@
     --color-accent-light: #1A2520;
     --color-accent-mid: #4A7A62;
   }
+}
+
+/* Dark mode — explicit manual override */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #111210;
+  --color-surface: #1C1D1A;
+  --color-text-primary: #F0EDE6;
+  --color-text-secondary: #9A9890;
+  --color-text-tertiary: #8F8D89;
+  --color-border: rgba(240, 237, 230, 0.08);
+  --color-accent: #7FAF95;
+  --color-accent-light: #1A2520;
+  --color-accent-mid: #4A7A62;
 }

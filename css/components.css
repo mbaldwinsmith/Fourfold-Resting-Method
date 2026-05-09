@@ -40,6 +40,10 @@
   font-size: 13px;
 }
 
+.btn--icon {
+  padding: 0.375rem;
+}
+
 .btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
