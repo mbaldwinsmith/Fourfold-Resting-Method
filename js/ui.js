@@ -1,8 +1,9 @@
 let _announcer = null;
 
 // Renders step cards into container. Active card gets .step-card--active;
-// adjacent cards are faded to indicate context without distraction.
-export function renderSteps(container, steps, activeIndex) {
+// adjacent cards use data-distance for CSS-controlled opacity.
+// Optional onSelect(index) callback fires when a non-active card is tapped.
+export function renderSteps(container, steps, activeIndex, onSelect) {
   container.innerHTML = '';
   steps.forEach((step, i) => {
     const card = document.createElement('div');
@@ -10,12 +11,17 @@ export function renderSteps(container, steps, activeIndex) {
     if (i === activeIndex) {
       card.classList.add('step-card--active');
     } else {
-      const distance = Math.abs(i - activeIndex);
-      card.style.opacity = distance === 1 ? '0.45' : '0.2';
+      card.dataset.distance = String(Math.min(Math.abs(i - activeIndex), 2));
     }
     card.textContent = step.text;
+    if (onSelect) {
+      card.addEventListener('click', () => onSelect(i));
+    }
     container.appendChild(card);
   });
+
+  const active = container.querySelector('.step-card--active');
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // Formats a seconds value as M:SS (e.g. 185 → '3:05').

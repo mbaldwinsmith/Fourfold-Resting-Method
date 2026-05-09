@@ -267,9 +267,10 @@ function beginSession() {
               <div id="steps-container" role="list"></div>
 
               <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-                <button class="btn btn--ghost btn--sm" id="btn-skip">
-                  Next step →
-                </button>
+                <button class="btn btn--ghost btn--sm" id="btn-prev-step"
+                        aria-label="Previous step">← Prev step</button>
+                <button class="btn btn--ghost btn--sm" id="btn-skip"
+                        aria-label="Next step">Next step →</button>
                 <button class="btn btn--ghost btn--sm" id="btn-science-toggle"
                         aria-expanded="false" aria-controls="science-panel">
                   The science
@@ -305,6 +306,7 @@ function beginSession() {
 
   wireChimeToggle('practice-chime')
   document.getElementById('btn-pause').addEventListener('click', togglePause)
+  document.getElementById('btn-prev-step').addEventListener('click', prevStep)
   document.getElementById('btn-skip').addEventListener('click', skipStep)
   document.getElementById('btn-prev').addEventListener('click', () => navigatePhase(-1))
   document.getElementById('btn-next').addEventListener('click', () => navigatePhase(1))
@@ -348,7 +350,10 @@ function startPhase(index) {
 
   // Steps
   const stepsEl = document.getElementById('steps-container')
-  if (stepsEl) ui.renderSteps(stepsEl, phase.steps, 0)
+  if (stepsEl) {
+    ui.renderSteps(stepsEl, phase.steps, 0, goToStep)
+    updateStepButtons()
+  }
 
   // Breath ring — visible only when a breath pattern is active
   const breathContainer = document.getElementById('breath-ring-container')
@@ -456,14 +461,24 @@ function togglePause() {
   }
 }
 
-function skipStep() {
+function goToStep(index) {
   const phase = getActivePhases()[state.currentPhaseIndex]
-  const next = state.currentStepIndex + 1
-  if (next < phase.steps.length) {
-    state.currentStepIndex = next
-    const el = document.getElementById('steps-container')
-    if (el) ui.renderSteps(el, phase.steps, next)
-  }
+  if (index < 0 || index >= phase.steps.length) return
+  state.currentStepIndex = index
+  const el = document.getElementById('steps-container')
+  if (el) ui.renderSteps(el, phase.steps, index, goToStep)
+  updateStepButtons()
+}
+
+function prevStep() { goToStep(state.currentStepIndex - 1) }
+function skipStep()  { goToStep(state.currentStepIndex + 1) }
+
+function updateStepButtons() {
+  const phase = getActivePhases()[state.currentPhaseIndex]
+  const prevBtn = document.getElementById('btn-prev-step')
+  const nextBtn = document.getElementById('btn-skip')
+  if (prevBtn) prevBtn.disabled = state.currentStepIndex === 0
+  if (nextBtn) nextBtn.disabled = state.currentStepIndex >= phase.steps.length - 1
 }
 
 function navigatePhase(delta) {
@@ -626,6 +641,10 @@ function onKeyDown(e) {
     case ' ':
       e.preventDefault()
       togglePause()
+      break
+    case 'ArrowLeft':
+      e.preventDefault()
+      prevStep()
       break
     case 'ArrowRight':
       e.preventDefault()
