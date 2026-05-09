@@ -1,0 +1,76 @@
+/* Reduced-motion default — animations effectively disabled unless opted in */
+* {
+  animation-duration: 0.01ms;
+  animation-iteration-count: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ── Keyframes ─────────────────────────────────────────────────────── */
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes breatheIn {
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+  }
+
+  @keyframes breatheOut {
+    from { transform: scale(1.18); }
+    to   { transform: scale(1); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  @keyframes shimmer {
+    from { background-position: left; }
+    to   { background-position: right; }
+  }
+
+  @keyframes progressIndeterminate {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(200%); }
+  }
+
+  /* ── Utility classes ───────────────────────────────────────────────── */
+
+  .fade-in {
+    animation: fadeIn var(--duration-medium) var(--ease-default) both;
+  }
+
+  .fade-up {
+    animation: fadeUp var(--duration-medium) var(--ease-default) both;
+  }
+
+  .fade-up--delayed {
+    animation: fadeUp var(--duration-medium) var(--ease-default) 150ms both;
+  }
+
+  .fade-up--delayed-2 {
+    animation: fadeUp var(--duration-medium) var(--ease-default) 300ms both;
+  }
+
+  .animate-breath-in {
+    animation: breatheIn var(--breath-in-duration, 4000ms) ease-in-out both;
+  }
+
+  .animate-breath-out {
+    animation: breatheOut var(--breath-out-duration, 8000ms) ease-in-out both;
+  }
+
+  .animate-pulse {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+}
