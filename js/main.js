@@ -429,8 +429,9 @@ function startPhase(index) {
     }
   })
 
-  state.timerState = 'running'
   activeTimer.start()
+  activeTimer.pause()
+  if (activeBreath) activeBreath.pause()
 
   if (state.chimeEnabled) chimeEngine.play('start', phase.chimeFrequency)
   ui.announce(`Phase ${phase.number}: ${phase.title}`)
