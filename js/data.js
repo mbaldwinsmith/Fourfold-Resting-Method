@@ -55,24 +55,24 @@ export const PRACTICE = {
         },
         {
           id: 's2',
-          text: 'Place one hand on the chest and one on the belly. Breathe in for a count of 4 through the nose, hold gently for 1, then exhale for a count of 8 through a gently open mouth. Encourage the lower hand to lead — diaphragmatic breathing produces stronger effects. Complete the full number of cycles for your chosen practice.'
+          text: 'Place one hand on the chest and one on the belly. Breathe in for a count of 4 through the nose, hold gently for 1, then exhale for a count of 6 through a gently open mouth. Encourage the lower hand to lead — diaphragmatic breathing produces stronger effects. Complete the full number of cycles for your chosen practice.'
         },
         {
           id: 's3',
           text: 'After the final cycle, release the counting. Let breath settle to its own slower rhythm. The technique has done its work; what remains is simply allowing the body to land.'
         }
       ],
-      science: 'Diaphragmatic breathing increases HRV through baroreceptor stimulation and reduces salivary cortisol (Ma et al. 2017). The extended exhale (1:2 inhale-to-exhale ratio) activates the vagal brake via stimulation of the nucleus ambiguus, increasing parasympathetic tone. The 4:1:8 ratio further stimulates the Hering-Breuer reflex, deepening the relaxation response (Lehrer & Gevirtz 2014; Zaccaro et al. 2018).',
+      science: 'Diaphragmatic breathing increases HRV through baroreceptor stimulation and reduces salivary cortisol (Ma et al. 2017). The extended exhale (2:3 inhale-to-exhale ratio) activates the vagal brake via stimulation of the nucleus ambiguus, increasing parasympathetic tone. The 4:1:6 ratio further stimulates the Hering-Breuer reflex, deepening the relaxation response (Lehrer & Gevirtz 2014; Zaccaro et al. 2018).',
       breathPattern: {
         inDuration: 4,
         holdDuration: 1,
-        outDuration: 8,
+        outDuration: 6,
         cycles: 6
       },
       breathPatternBrief: {
         inDuration: 4,
         holdDuration: 0,
-        outDuration: 8,
+        outDuration: 6,
         cycles: 3
       }
     },

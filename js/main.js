@@ -8,7 +8,7 @@ import * as ui from './ui.js'
 // ─── Application state ────────────────────────────────────────────────────────
 
 const state = {
-  mode: null,
+  mode: 'full',
   currentPhaseIndex: 0,
   currentStepIndex: 0,
   timerState: 'idle',
@@ -117,76 +117,12 @@ function wireChimeToggle(id) {
 
 const app = document.getElementById('app')
 
-// ─── Home view ────────────────────────────────────────────────────────────────
-
-function showHome() {
-  runCleanup()
-  state.activeView = 'home'
-  updateNav('/')
-  ui.setTitle(null)
-
-  app.innerHTML = `
-    <div class="section">
-      <div class="container">
-        <div class="stack" style="--stack-gap:2.5rem">
-
-          <div class="stack" style="--stack-gap:0.75rem">
-            <h1 class="fade-up">${PRACTICE.title}</h1>
-            <p style="color:var(--color-text-secondary);max-width:52ch" class="fade-up--delayed">
-              ${PRACTICE.subtitle}. ${PRACTICE.tagline}.
-            </p>
-          </div>
-
-          <div class="grid-2 fade-up--delayed-2">
-            ${PRACTICE.modes.map(mode => `
-              <div class="card stack" style="--stack-gap:1rem">
-                <div class="stack" style="--stack-gap:0.25rem">
-                  <span class="label">${mode.duration} · ${mode.posture}</span>
-                  <h4>${mode.title}</h4>
-                </div>
-                <p class="caption" style="max-width:none">${mode.description}</p>
-                <div>
-                  <button class="btn btn--primary btn-begin" data-mode="${mode.id}">
-                    Begin
-                  </button>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="section--sm" style="border-top:1px solid var(--color-border)">
-      <div class="container">
-        <div class="stack" style="--stack-gap:1rem">
-          <h3>What is this?</h3>
-          <p>${PRACTICE.overview}</p>
-          <a href="#/about">The science behind the practice →</a>
-        </div>
-      </div>
-    </div>
-  `
-
-  app.querySelectorAll('.btn-begin').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.mode = btn.dataset.mode
-      state.currentPhaseIndex = 0
-      state.currentStepIndex = 0
-      state.practiceComplete = false
-      router.navigate('/practice')
-    })
-  })
-}
-
 // ─── Practice: ready screen ───────────────────────────────────────────────────
 
 function showPractice() {
   runCleanup()
-  if (!state.mode) { router.navigate('/'); return }
   state.activeView = 'practice'
-  updateNav('/practice')
+  updateNav('/')
 
   const modeData = PRACTICE.modes.find(m => m.id === state.mode)
   const phases = getActivePhases()
@@ -199,10 +135,17 @@ function showPractice() {
       <div class="container container--narrow">
         <div class="stack fade-up" style="--stack-gap:2rem">
 
-          <div class="stack" style="--stack-gap:0.5rem">
-            <span class="label">Ready to begin</span>
-            <h2>${modeData.title}</h2>
-            <p class="caption">${modeData.duration} · ${phaseList}</p>
+          <div class="stack" style="--stack-gap:1rem">
+            <div class="stack" style="--stack-gap:0.5rem">
+              <h2>${modeData.title}</h2>
+              <p class="caption">${modeData.duration} · ${phaseList}</p>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+              ${PRACTICE.modes.map(m => `
+                <button class="btn btn--sm${m.id === state.mode ? ' btn--primary' : ' btn--ghost'}"
+                        data-mode-select="${m.id}">${m.title}</button>
+              `).join('')}
+            </div>
           </div>
 
           <p style="max-width:none">${modeData.description}</p>
@@ -215,9 +158,8 @@ function showPractice() {
             </p>
           </div>
 
-          <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+          <div>
             <button class="btn btn--primary" id="btn-start">Begin practice</button>
-            <a href="#/" class="btn btn--ghost">← Back</a>
           </div>
 
         </div>
@@ -227,6 +169,12 @@ function showPractice() {
 
   wireChimeToggle('ready-chime')
   document.getElementById('btn-start').addEventListener('click', () => switchView(beginSession))
+  app.querySelectorAll('[data-mode-select]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.mode = btn.dataset.modeSelect
+      showPractice()
+    })
+  })
 }
 
 // ─── Practice: active session shell ──────────────────────────────────────────
@@ -574,7 +522,7 @@ function completePractice() {
           </p>
 
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-            <a href="#/" class="btn btn--primary">Return to home</a>
+            <a href="#/" class="btn btn--primary">New practice</a>
             <button class="btn btn--ghost" id="btn-again">Begin again</button>
           </div>
 
@@ -671,7 +619,7 @@ function init() {
   const savedChime = localStorage.getItem('fourfold-chime')
   if (savedChime === 'true') state.chimeEnabled = true
 
-  router.register('/', () => switchView(showHome))
+  router.register('/', () => switchView(showPractice))
   router.register('/practice', () => switchView(showPractice))
   router.register('/about', () => switchView(showAbout))
   router.start()
